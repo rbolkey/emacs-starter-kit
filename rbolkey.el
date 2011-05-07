@@ -9,12 +9,21 @@
 	 (color-theme-emacs-nw))))
 
 ;; require or autoload highlight-parentheses
+(autoload 'hightlight-parentheses-mode "highlight-parentheses" nil t)
+(add-hook 'highlight-parentheses-mode-hook
+          '(lambda ()
+             (setq autopair-handle-action-fns
+                   (append
+                    (if (boundp 'autopair-handle-action-fns)
+                        autopair-handle-action-fns
+                      '(autopair-default-handle-action))
+                    '((lambda (action pair pos-before)
+                        (hl-paren-color-update)))))))
+
 (defun lisp-enable-highlight-parentheses-hook ()
-  (highlight-parentheses-mode)
-  (setq autopair-handle-action-fns
-	(list 'autopair-default-handle-action
-	      '(lambda (action pair pos-before)
-		 (hl-paren-color-update)))))
+  (when (locate-library "highlight-parentheses")
+      (require 'highlight-parentheses)
+      (highlight-parentheses-mode)))
 
 (add-hook 'clojure-mode-hook          'lisp-enable-highlight-parentheses-hook)
 (add-hook 'slime-repl-mode-hook       'lisp-enable-highlight-parentheses-hook)
@@ -24,7 +33,11 @@
 
 
 ;; require or autoload paredit-mode
-(defun lisp-enable-paredit-hook () (paredit-mode 1))
+(autoload 'paredit-mode "paredit" nil t)
+(defun lisp-enable-paredit-hook ()
+  (when (locate-library "paredit")
+      (require 'paredit)
+      (paredit-mode 1)))
 
 (add-hook 'clojure-mode-hook          'lisp-enable-paredit-hook)
 (add-hook 'slime-repl-mode-hook       'lisp-enable-paredit-hook)
