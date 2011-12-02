@@ -5,8 +5,8 @@
   '(progn
      '(color-theme-initialize)
      (if (window-system)
-	 (color-theme-charcoal-black)
-	 (color-theme-emacs-nw))))
+	 (color-theme-arjen)
+	 (color-theme-arjen))))
 
 ;; require or autoload highlight-parentheses
 (autoload 'hightlight-parentheses-mode "highlight-parentheses" nil t)
